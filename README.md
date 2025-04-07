@@ -1,0 +1,8 @@
+# 🔐 Projeto Captive ESP32 - Portal de Autenticação Simulado
+
+Este projeto foi desenvolvido para fins exclusivamente educacionais, com o objetivo de demonstrar as ameaças a que estamos sujeitos acessando redes de Wi-fi não confiáveis, usando a manipulação de requisições DNS em dispositivos ESP32. Ao ser instalado, o dispositivo cria uma rede Wi-Fi aberta que, ao ser acessada por um smartphone ou outro dispositivo, redireciona automaticamente o usuário para uma página de login simulada. Essa página pode imitar interfaces populares, como Google ou Facebook, sendo o modelo do Google o padrão. Quando o usuário preenche o formulário e envia os dados, uma mensagem de erro é exibida, simulando uma falha na conexão, enquanto as credenciais são armazenadas localmente na memória flash do ESP32. Essas informações podem ser consultadas posteriormente acessando o endereço `/logs` no domínio local.
+
+A instalação é simples e direta: basta carregar o código usando a Arduino IDE em qualquer placa compatível com ESP32 e não exige componentes adicionais. O sistema ainda permite configurar um portal cativo principal e até três URLs específicas que, ao serem acessadas pelos usuários, exibirão páginas falsas correspondentes para captura de credenciais. Todos os parâmetros de rede, aparência do portal e páginas simuladas podem ser ajustados diretamente no arquivo principal do código.
+
+Este projeto foi inspirado no trabalho do usuário Kauan0122 com o ESP32Captive, disponível [aqui](https://github.com/Kauan0122/ESP32Captive/tree/main), e adaptado para fins de estudo em segurança cibernética e redes.
+
