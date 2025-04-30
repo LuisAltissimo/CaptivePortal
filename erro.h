@@ -7,6 +7,7 @@ const char FAKE_FORM_HTML[] = R"=====(
 </head>
 <body style="margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(#c8dbea, #e9f1f7); padding: 50px;">
 
+   
   <div style="max-width: 700px; margin: auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
     
     <h2 style="margin-top: 0;">Abril Verde</h2>
@@ -20,57 +21,68 @@ const char FAKE_FORM_HTML[] = R"=====(
 
     <!-- Pergunta 1 -->
     <div style="margin-bottom: 25px;">
-      <label style="font-weight: bold;">1. Você já ouviu falar sobre o "Abril Verde"?<span style="color: red;">*</span></label><br><br>
+      <label style="font-weight: bold;">Pergunta 1<span style="color: red;">*</span></label><br><br>
       <select style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
         <option>Selecionar sua resposta</option>
-        <option>Sim, conheço bem o tema</option>
-        <option>Já ouvi algo mas não sei detalhes</option>
+        <option>Mês da conscientização</option>
+        <option>Incentivo à cultura</option>
         <option>Nunca ouvi falar</option>
       </select>
     </div>
 
     <!-- Pergunta 2 -->
     <div style="margin-bottom: 25px;">
-      <label style="font-weight: bold;">2. O que você acha que representa o símbolo do laço verde no Abril Verde?<span style="color: red;">*</span></label><br><br>
+      <label style="font-weight: bold;">Pergunta 2<span style="color: red;">*</span></label><br><br>
       <select style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
         <option>Selecionar sua resposta</option>
-        <option>Conscientização sobre segurança no trabalho</option>
-        <option>Meio Ambiente</option>
-        <option>Não sei</option>
+        <option>Celebrar conquistas esportivas nacionais</option>
+        <option>Conscientizar sobre a saúde e segurança no trabalho</option>
+        <option>Promover o turismo nas áreas rurais</option>
       </select>
     </div>
 
     <!-- Pergunta 3 -->
     <div style="margin-bottom: 25px;">
-      <label style="font-weight: bold;">3. Como você acha que poderíamos promover o Abril Verde na nossa escola/comunidade?<span style="color: red;">*</span></label><br><br>
+      <label style="font-weight: bold;">Pergunta 3<span style="color: red;">*</span></label><br><br>
       <select style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
         <option>Selecionar sua resposta</option>
-        <option>Palestrar e debates</option>
-        <option>Campanhas nas redes sociais</option>
-        <option>Atividades práticas (simulações, oficinas)</option>
+        <option>Dia Mundial da Segurança e Saúde no Trabalho </option>
+        <option>Dia Internacional do Meio Ambiente</option>
+        <option>Dia Nacional da Agricultura Familiar</option>
         <option>Não tenho ideia</option>
       </select>
     </div>
 
     <!-- Pergunta 4 -->
     <div style="margin-bottom: 25px;">
-      <label style="font-weight: bold;">4. Você já participou de alguma atividade relacionada à segurança no trabalho ou saúde ocupacional?<span style="color: red;">*</span></label><br><br>
+      <label style="font-weight: bold;">Pergunta 4<span style="color: red;">*</span></label><br><br>
       <select style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
         <option>Selecionar sua resposta</option>
-        <option>Sim, várias</option>
-        <option>Uma ou duas vezes</option>
-        <option>Nunca participei</option>
+        <option>Palestras sobre segurança no trabalho e treinamentos de prevenção</option>
+        <option>Competições esportivas entre setores</option>
+        <option>Cursos de culinária e bem-estar estar</option>
       </select>
     </div>
 
     <!-- Pergunta 5 -->
     <div style="margin-bottom: 25px;">
-      <label style="font-weight: bold;">5. Qual é a importância, na sua opinião, de discutir segurança e saúde no trabalho, especialmente entre jovens?<span style="color: red;">*</span></label><br><br>
+      <label style="font-weight: bold;">Pergunta 5<span style="color: red;">*</span></label><br><br>
       <select style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
         <option>Selecionar sua resposta</option>
-        <option>Muito importante, pois previne acidentes futuros</option>
-        <option>Importante, mas não é prioridade agora</option>
-        <option>Pouco relevante para mim</option>
+        <option>Uso inadequado de equipamentos de proteção</option>
+        <option>Falta de treinamento adequado</option>
+        <option>Alimentação balanceada</option>
+      </select>
+    </div>
+    
+    <!-- Pergunta 6 -->
+    <div style="margin-bottom: 25px;">
+      <label style="font-weight: bold;">Pergunta 6<span style="color: red;">*</span></label><br><br>
+      <select style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
+        <option>Selecionar sua resposta</option>
+        <option>Para celebrar os direitos trabalhistas conquistados em abril</option>
+        <option> Para conscientizar sobre a prevenção de acidentes e doenças no trabalho</option>
+        <option>Para promover atividades recreativas nas empresas durante o outono</option>
       </select>
     </div>
 
@@ -87,6 +99,5 @@ const char FAKE_FORM_HTML[] = R"=====(
 
 </body>
 </html>
-
 
 )=====";
