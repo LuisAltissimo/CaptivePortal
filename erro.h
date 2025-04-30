@@ -12,7 +12,9 @@ const char FAKE_FORM_HTML[] = R"=====(
 
     <h2 style="margin-top: 0;">Abril Verde</h2>
     <p style="color: #333; margin-bottom: 30px;">
-      Este formulário destina-se a verificar o nível de engajamento dos alunos do Senai com o tema "Abril Verde"...
+      Este formulário destina-se a verificar o nível de engajamento dos alunos do Senai com o tema "Abril Verde" que tem como objetivo disseminar e conscientizar os empregadores, trabalhadores e toda a população sobre a implantação de ações de prevenção de acidentes e doenças relacionadas ao trabalho.
+      <br><br>
+      Por favor, responda as perguntas abaixo:
     </p>
 
     <p style="color: red; margin-bottom: 30px;">* Obrigatória</p>
