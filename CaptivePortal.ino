@@ -14,7 +14,7 @@
 #define LOGFILE "/log.txt"
  
 // Ponto de acesso
-const char *ssid="SENAI-FHZ-BIBLIOTECA";
+const char *ssid="SENAI-FHZ-BIBLIOTECA_1";
 
 // Login da pagina de captura
 #define captivePortalPage GOOGLE_HTML
