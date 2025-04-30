@@ -217,7 +217,7 @@ void setup() {
 
   // Página de respostas
   server.on("/respostas", []() {
-    webString = "<html><body>";
+    webString = "<html><head><meta charset='UTF-8'></head><body>";
     webString += "<h1>Respostas do Formulário</h1><pre>";
 
     File f = SPIFFS.open(RESPOSTASFILE, "r");
