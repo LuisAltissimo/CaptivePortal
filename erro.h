@@ -31,7 +31,7 @@ const char FAKE_FORM_HTML[] = R"=====(
         font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
         font-weight: 700; /* Bold */
         /* Usando vw para o texto escalar com a largura da tela - "o maior possível" */
-        font-size: 18vw;  /* Ajuste este valor para mais/menos tamanho */
+        font-size: 12vw;  /* Ajuste este valor para mais/menos tamanho */
         line-height: 0.85em; /* Linhas bem próximas para efeito de logo */
         text-transform: uppercase;
         display: block;
@@ -45,7 +45,7 @@ const char FAKE_FORM_HTML[] = R"=====(
     }
     .welcome-message {
       font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-      font-size: 7vw; /* Proporcionalmente menor que o logo, mas ainda grande */
+      font-size: 5vw; /* Proporcionalmente menor que o logo, mas ainda grande */
       color: #3284d6;
       margin-top: 0;
       margin-bottom: 0;
@@ -62,6 +62,7 @@ const char FAKE_FORM_HTML[] = R"=====(
       <span class="logo-line logo-senai">SENAI</span>
     </div>
     <p class="welcome-message">SEJA BEM VINDO</p>
+    <p class="welcome-message">TURMA HT-INI-02-N-24-13451</p>
   </div>
 
 </body>

