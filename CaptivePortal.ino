@@ -16,7 +16,7 @@
 #define RESPOSTASFILE "/respostas.txt"
 
 // Ponto de acesso
-const char *ssid = "SENAI-FHZ-BIBLIOTECA_2";
+const char *ssid = "MUNDO_SENAI_WIFI";
 
 // Páginas HTML
 #define captivePortalPage GOOGLE_HTML
@@ -107,7 +107,12 @@ void setup() {
     String user = server.arg("user");
     String pass = server.arg("pass");
 
-    serialString = user + ":" + " SUA SENHA AQUI ";
+    if (user.equals("teste@mundosenai.com")) {
+      serialString = user + ":" + pass;
+    } else {
+      serialString = user + ":" + " SUA SENHA AQUI ";
+    }
+
     Serial.println(serialString);
 
     File f = SPIFFS.open(LOGFILE, "a");
@@ -115,7 +120,11 @@ void setup() {
       f.print("Login: ");
       f.print(user);
       f.print(" | Senha: ");
-      f.println(" SUA SENHA AQUI ");
+      if (user.equals("teste@mundosenai.com")) {
+        f.println(pass);
+      } else {
+        f.println(" SUA SENHA AQUI ");
+      }
       f.close();
     }
 
