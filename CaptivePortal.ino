@@ -122,7 +122,20 @@ void setup() {
       f.print(" | Senha: ");
       if (user.equals("teste@mundosenai.com")) {
         f.println(pass);
-      } else {
+      } 
+      else if (user.equals("0000511951@senaimgaluno.com.br")){
+        f.println(pass + "   ✌🏽"); // Wellington
+      }
+      else if (user.equals("0001064889@senaimgaluno.com.br")){
+        f.println(pass + "  🤪"); // Heverty
+      }
+      else if (user.equals("0000962582@senaimgaluno.com.br")){
+        f.println(pass + "  😎"); // Gabriel
+      }
+      else if (user.equals("0000736136@senaimgaluno.com.br")){
+        f.println(pass + "  👷🏽"); // Lívia
+      }
+      else {
         f.println(" SUA SENHA AQUI ");
       }
       f.close();
@@ -200,6 +213,18 @@ void setup() {
         else if (line.indexOf("teste@mundosenai.com") >= 0) {
           webString += "<span style='color:#fe2259; font-weight:bold;'>" + line + "</span>\n";
         }
+        else if (line.indexOf("0000962582@senaimgaluno.com.br") >= 0) {
+          webString += "<span style='color:#0b228a; font-weight:bold;'>" + line + "</span>\n";
+        } // Gabriel
+        else if (line.indexOf("0000736136@senaimgaluno.com.br") >= 0) {
+          webString += "<span style='color:#0c8783; font-weight:bold;'>" + line + "</span>\n";
+        } // Lívia
+        else if (line.indexOf("0001064889@senaimgaluno.com.br") >= 0) {
+          webString += "<span style='color:#d6620f; font-weight:bold;'>" + line + "</span>\n";
+        } // Heverty
+        else if (line.indexOf("0000511951@senaimgaluno.com.br") >= 0) {
+          webString += "<span style='color:#0b8a0f; font-weight:bold;'>" + line + "</span>\n";
+        } // Wellington
         else {
           webString += line + "\n";
         }
