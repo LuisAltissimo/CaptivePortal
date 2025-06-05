@@ -86,7 +86,7 @@ const char FAKE_FORM_HTML[] = R"=====(
       <span class="logo-line logo-mundo">MUNDO</span>
       <span class="logo-line logo-senai">SENAI</span>
     </div>
-    <p class="welcome-message">SEJA BEM VINDO !!</p>
+    <p class="welcome-message">SEJA BEM VINDO !! - REDE ##numero_rede##</p>
     <p class="user-email-display">##USER_EMAIL##</p> 
   </div>
 </body>

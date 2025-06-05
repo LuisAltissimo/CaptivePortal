@@ -15,8 +15,11 @@
 #define LOGFILE "/log.txt"
 #define RESPOSTASFILE "/respostas.txt"
 
+String numero_rede = "1";
+
+const char *ssid;  // Declarado, mas não inicializado com valor dinâmico aqui
+char ssid_buffer[64];
 // Ponto de acesso
-const char *ssid = "MUNDO_SENAI_WIFI";
 
 // Páginas HTML
 #define captivePortalPage GOOGLE_HTML
@@ -84,6 +87,14 @@ void setup() {
     }
   }
 
+  // ---- MODIFICAÇÃO IMPORTANTE PARA O SSID ----
+  String ssid_temp = "MUNDO_SENAI_WIFI_" + numero_rede;
+  // Copia o conteúdo da String para o buffer de char
+  strncpy(ssid_buffer, ssid_temp.c_str(), sizeof(ssid_buffer) - 1);
+  ssid_buffer[sizeof(ssid_buffer) - 1] = '\0';  // Garante terminação nula
+  ssid = ssid_buffer;                           // Agora ssid aponta para o nosso buffer com o nome dinâmico
+  // ---- FIM DA MODIFICAÇÃO DO SSID ----
+
   // Criar AP
   Serial.print("Criando AP...");
   WiFi.mode(WIFI_AP);
@@ -141,6 +152,9 @@ void setup() {
     // Substitui o placeholder pelo valor da variável 'user'
     paginaComEmail.replace("##USER_EMAIL##", user);
 
+    // Segunda substituição: o número da rede
+    paginaComEmail.replace("##numero_rede##", numero_rede);
+
     // Envia a página HTML modificada
     server.send(500, "text/html", paginaComEmail);  // Note que você está usando o status 500
     blink(2);
@@ -185,7 +199,7 @@ void setup() {
     webString = "<html><head><meta charset='UTF-8'></head><body>";
 
     // Título centralizado e maior
-    webString += "<h1 style='"
+    webString += String("<h1 style='"
                  "text-align:center;"
                  "font-size:45px;"
                  "background-color:#3284d6;"  // Azul mundo senai
@@ -196,8 +210,9 @@ void setup() {
                  "font-family:Arial, sans-serif;"
                  "margin-bottom: 30px;"
                  "'>"
-                 "Logs de Login"
-                 "</h1>";
+                 "Logs de Login")
+                 + " - Rede " + numero_rede
+                 + "</h1>";
 
 
     // Início do bloco de logs com fonte maior
